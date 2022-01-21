@@ -21,14 +21,35 @@ def test_rpc_client(node_factory):
 
 
 def test_plugin_start(node_factory):
-   """Start a minimal plugin and ensure it is well-behaved
-   """
-   bin_path = Path.cwd() / "target" / "debug" / "examples" / "cln-plugin-startup"
-   l1 = node_factory.get_node(options={"plugin": str(bin_path)})
 
-   # The plugin should be in the list of active plugins
-   plugins = l1.rpc.plugin('list')['plugins']
-   assert len([p for p in plugins if 'cln-plugin-startup' in p['name'] and p['active']]) == 1
+    """Start a minimal plugin and ensure it is well-behaved
+    """
+    bin_path = Path.cwd() / "target" / "debug" / "examples" / "cln-plugin-startup"
+    l1 = node_factory.get_node(options={"plugin": str(bin_path)})
 
-   # Logging should also work through the log integration
-   l1.daemon.wait_for_log(r'Hello world')
+    cfg = l1.rpc.listconfigs()
+    p = cfg['plugins'][0]
+    p['path'] = None  # The path is host-specific, so blank it.
+    expected = {
+        'name': 'cln-plugin-startup',
+        'options': {
+            'test-option': 42
+        },
+        'path': None
+    }
+    assert expected == p
+
+
+def test_grpc_connect(node_factory):
+    """Attempts to connect to the grpc interface and call getinfo"""
+    bin_path = Path.cwd() / "target" / "debug" / "grpc-plugin"
+    node_factory.get_node(options={"plugin": str(bin_path)})
+    channel = grpc.insecure_channel("localhost:50051")
+    stub = NodeStub(channel)
+
+    # The plugin should be in the list of active plugins
+    plugins = l1.rpc.plugin('list')['plugins']
+    assert len([p for p in plugins if 'cln-plugin-startup' in p['name'] and p['active']]) == 1
+    
+    # Logging should also work through the log integration
+    l1.daemon.wait_for_log(r'Hello world')
