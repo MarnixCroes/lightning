@@ -1,3 +1,4 @@
+use crate::options;
 use crate::options::ConfigOption;
 use serde::de::{self, Deserializer};
 use serde::{Deserialize, Serialize};
@@ -62,9 +63,9 @@ pub(crate) enum Notification {
 pub struct GetManifestCall {}
 
 #[derive(Deserialize, Debug)]
-pub struct InitCall {
-    pub options: Value,
-    pub configuration: HashMap<String, Value>,
+pub(crate) struct InitCall {
+    pub(crate) options: HashMap<String, Value>,
+    configuration: HashMap<String, Value>,
 }
 
 #[derive(Debug)]
