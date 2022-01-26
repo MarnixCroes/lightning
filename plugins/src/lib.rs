@@ -214,7 +214,7 @@ where
                     (OValue::Integer(_), JValue::Number(n)) => OValue::Integer(n.as_i64().unwrap()),
                     (OValue::Boolean(_), JValue::Bool(n)) => OValue::Boolean(*n),
 
-		    // It's ok to panic, if we get here lightnignd has
+		    // It's ok to panic, if we get here `lightnignd` has
 		    // not enforced the option type.
                     (_, _) => panic!("Mismatching types in options: {:?} != {:?}", opt, val),
                 });
