@@ -1,3 +1,5 @@
+<img src="logo.png">
+
 # Core Lightning (CLN): A specification compliant Lightning Network implementation in C
 
 Core Lightning (previously c-lightning) is a lightweight, highly customizable and [standard compliant][std] implementation of the Lightning Network protocol.
