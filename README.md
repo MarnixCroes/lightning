@@ -1,4 +1,4 @@
-<img src="logo.png">
+<img src="logo.svg">
 
 # Core Lightning (CLN): A specification compliant Lightning Network implementation in C
 
